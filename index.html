@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CampusFind – Which Block Is 34?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== NAVIGATION BAR ===== -->
+<header class="navbar">
+  <a class="logo" href="#" data-view="home">
+    <svg width="26" height="26" viewBox="0 0 24 24"><path fill="#8fb0ff" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+    Campus<span>Find</span>
+  </a>
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  <nav id="navLinks">
+    <a href="#" data-view="home">Home</a>
+    <a href="#" data-view="map">Campus Map</a>
+    <a href="#how" data-scroll="how">How It Works</a>
+    <a href="#about" data-scroll="about">About</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===== VIEW 1: HOME ===== -->
+  <section class="view" id="view-home">
+    <div class="hero">
+      <div class="hero-text">
+        <span class="badge">Which Block Is 34?</span>
+        <h1>Find Your Way Around Campus</h1>
+        <p>CampusFind helps students and visitors quickly find unfamiliar blocks. Search a block number or name, pick where you are, and follow the route on the map.</p>
+
+        <!-- Search card: two fields with live suggestions -->
+        <form class="search-card" id="searchForm" autocomplete="off">
+          <div class="field">
+            <span class="fi">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search block number or name (e.g. 34)" aria-label="Search blocks">
+            <button type="button" class="clear" id="clearSearch" aria-label="Clear" hidden>✕</button>
+            <div class="suggest" id="suggestSearch" hidden></div>
+          </div>
+          <div class="field">
+            <span class="fi">📍</span>
+            <input type="text" id="homeStartInput" placeholder="Your location (optional) – e.g. Main Gate" aria-label="Your location">
+            <div class="suggest" id="suggestHome" hidden></div>
+          </div>
+          <button class="btn primary" type="submit">Search</button>
+        </form>
+
+        <div class="chips" id="chips"></div>
+      </div>
+
+      <div class="hero-map card">
+        <div id="previewMap"></div>
+        <p class="note">Vector map based on the LPU site plan. Routes are approximate.</p>
+      </div>
+    </div>
+
+    <section class="section" id="how">
+      <h2>How It Works</h2>
+      <div class="steps-grid">
+        <div class="card step"><b>1</b><h3>Search</h3><p>Type a block number or name and pick a suggestion.</p></div>
+        <div class="card step"><b>2</b><h3>View Details</h3><p>See the category, area and nearby blocks.</p></div>
+        <div class="card step"><b>3</b><h3>Pick Your Location</h3><p>Choose the Main Gate or the block you are at.</p></div>
+        <div class="card step"><b>4</b><h3>Follow Route</h3><p>Follow the arrows and the step-by-step directions.</p></div>
+      </div>
+    </section>
+
+    <section class="section about" id="about">
+      <h2>About CampusFind</h2>
+      <p>CampusFind is a Design Thinking prototype that solves the problem of new students and visitors not knowing where a block is. Block numbers and names follow the campus site plan legend. Routes follow the campus roads from the site plan and are <b>approximate</b>; verify them on campus before final use.</p>
+    </section>
+  </section>
+
+  <!-- ===== VIEW 2: SEARCH RESULTS ===== -->
+  <section class="view" id="view-results" hidden>
+    <button class="btn ghost back" data-view="home">← Back</button>
+    <h2 id="resultsTitle">Search Results</h2>
+    <p class="note" id="resultsCount"></p>
+    <div class="chips" id="filterChips"></div>
+    <div class="detail-grid" id="resultsGrid">
+      <div class="rlist" id="resultsList"></div>
+      <div id="resultsMap"></div>
+    </div>
+  </section>
+
+  <!-- ===== VIEW 3: BLOCK DETAILS ===== -->
+  <section class="view" id="view-details" hidden>
+    <button class="btn ghost back" id="backToResults">← Back</button>
+    <div class="detail-grid">
+      <div class="card" id="detailInfo"></div>
+      <div id="detailMap"></div>
+    </div>
+  </section>
+
+  <!-- ===== VIEW 4: STARTING POINT ===== -->
+  <section class="view" id="view-start" hidden>
+    <button class="btn ghost back" id="backToDetails">← Back</button>
+    <div class="detail-grid">
+      <div class="card">
+        <h2>Where are you now?</h2>
+        <div class="dest-row" id="startDest"></div>
+        <div class="field">
+          <span class="fi">🔍</span>
+          <input type="text" id="startFilter" placeholder="Search your location (number or name)" autocomplete="off">
+        </div>
+        <div class="startlist" id="startList"></div>
+        <button class="btn primary wide" id="showRouteBtn">Show Route</button>
+      </div>
+      <div id="startMap"></div>
+    </div>
+  </section>
+
+  <!-- ===== VIEW 5: ROUTE ===== -->
+  <section class="view" id="view-route" hidden>
+    <button class="btn ghost back" id="backToStart">← Back</button>
+    <div class="detail-grid">
+      <div class="card">
+        <h2 id="routeTitle">Route</h2>
+        <ol id="routeSteps" class="dir-steps"></ol>
+        <p class="note">Approximate route for guidance only.</p>
+      </div>
+      <div id="routeMap"></div>
+    </div>
+  </section>
+
+  <!-- ===== VIEW 6: FULL MAP ===== -->
+  <section class="view" id="view-map" hidden>
+    <h2>Campus Map</h2>
+    <p class="note">Tap a block to see its details. Drag to move, scroll or pinch to zoom.</p>
+    <div id="fullMap"></div>
+  </section>
+
+</main>
+
+<footer>
+  <b>CampusFind</b> · Project: “Which Block Is 34?” · Design Thinking Project · LPU
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
